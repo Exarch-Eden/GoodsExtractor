@@ -1,0 +1,24 @@
+{
+  "name": "GoodsExtractor",
+  "version": "1.0.0",
+  "description": ":L",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Exarch-Eden/GoodsExtractor.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Exarch-Eden/GoodsExtractor/issues"
+  },
+  "homepage": "https://github.com/Exarch-Eden/GoodsExtractor#readme",
+  "dependencies": {
+    "electron": "^12.0.7"
+  }
+}
