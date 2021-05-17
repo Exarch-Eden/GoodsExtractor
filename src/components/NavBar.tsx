@@ -12,6 +12,7 @@ const NavBar = () => {
   return (
     <nav className="navBar">
       <NavLink to="/" text="Home" />
+      <NavLink to="/search" text="Search" />
       <NavLink to="/about" text="About" />
     </nav>
   )
