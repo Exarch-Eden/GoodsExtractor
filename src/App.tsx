@@ -1,9 +1,9 @@
 // third-party libraries
 import { HashRouter } from 'react-router-dom';
-import NavBar from './components/NavBar';
-import Routes from './components/Routes';
 
 // components
+import NavBar from './components/NavBar';
+import Routes from './components/Routes';
 
 // css
 import './styles/App.css';
