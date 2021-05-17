@@ -10,7 +10,7 @@ import "../styles/Universal.css";
 const Home = () => {
   return (
     <div className="homeContainer">
-      <div className="titleContainer">
+      <div className="titleContainer verticalPadding">
         <p>Home Page</p>
       </div>
     </div>

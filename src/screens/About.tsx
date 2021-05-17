@@ -10,7 +10,7 @@ import "../styles/Universal.css";
 const About = () => {
   return (
     <div className="aboutContainer">
-      <div className="titleContainer">
+      <div className="titleContainer verticalPadding">
         <p>About Page</p>
       </div>
     </div>

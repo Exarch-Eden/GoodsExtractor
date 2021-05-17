@@ -18,7 +18,7 @@ function App() {
         <main className="mainContainer">
           <Routes />
         </main>
-        <footer className="footerContainer">
+        <footer className="footerContainer verticalPadding">
           <p>Electron app created by Kent Claudio</p>
         </footer>
       </HashRouter>
