@@ -4,17 +4,17 @@ import React from "react";
 // components
 
 // css
-import "../styles/Home.css";
+import "../styles/About.css";
 import "../styles/Universal.css";
 
-const Home = () => {
+const About = () => {
   return (
-    <div className="homeContainer">
+    <div className="aboutContainer">
       <div className="titleContainer">
-        <p>Home Page</p>
+        <p>About Page</p>
       </div>
     </div>
   );
 };
 
-export default Home;
+export default About;
