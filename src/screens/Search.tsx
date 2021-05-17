@@ -2,6 +2,7 @@
 import React from "react";
 
 // components
+import SearchInput from "../components/SearchInput";
 
 // css
 import "../styles/Home.css";
@@ -14,7 +15,7 @@ const Search = () => {
         <p>Search Page</p>
       </div>
       <div className="contentContainer verticalPadding">
-        
+        <SearchInput />
       </div>
     </div>
   );
