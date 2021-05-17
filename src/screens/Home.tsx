@@ -1,5 +1,6 @@
 // third-party libraries
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 // components
 
@@ -12,16 +13,28 @@ const serverLatestUrl = "http://localhost:8000/nh";
 const renderLatestBooks = (books: String[]) => {
   // TODO: dynamically render table header with updated
   // books object
+
+  // TODO: replace index in `/title/${index}` to prop of Link
+  // with dynamic book id
+  
   return (
     <table className="latestTable">
-      <tr>
-        <th>Titles</th>
-      </tr>
-      {books.map((curTitle, index) => (
-        <tr key={index}>
-          <td key={index}>{curTitle}</td>
+      <thead>
+        <tr>
+          <th>Titles</th>
         </tr>
-      ))}
+      </thead>
+      <tbody>
+        {books.map((curTitle, index) => (
+          <tr key={index}>
+            <td key={index}>
+              <Link to={`/title/${index}`} className="titleLink">
+                {curTitle}
+              </Link>
+            </td>
+          </tr>
+        ))}
+      </tbody>
     </table>
   );
 };
@@ -63,7 +76,7 @@ const Home = () => {
         </div> */}
         <div className="homeLatestContainer verticalPadding">
           <p>Latest Title Releases</p>
-          <p>{renderLatestBooks(latestData)}</p>
+          {renderLatestBooks(latestData)}
         </div>
       </div>
     </div>
