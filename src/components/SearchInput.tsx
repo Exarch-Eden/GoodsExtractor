@@ -33,9 +33,3 @@ const SearchInput = () => {
 };
 
 export default SearchInput;
-
-const blankOptions = [
-  {
-    title: "",
-  },
-];
