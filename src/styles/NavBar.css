@@ -1,0 +1,12 @@
+.navBar {
+  display: flex;
+  flex-direction: row;
+}
+
+.navBar > * {
+  padding: 1em;
+}
+
+.navBar > *:hover {
+  background-color: var(--gray);
+}

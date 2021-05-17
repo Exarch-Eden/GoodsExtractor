@@ -1,3 +1,12 @@
 .titleContainer {
   background-color: var(--teal);
 }
+
+p {
+  margin: 0;
+}
+
+.verticalPadding {
+  padding-top: 1em;
+  padding-bottom: 1em;
+}
