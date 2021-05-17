@@ -8,31 +8,41 @@ import { Link } from "react-router-dom";
 import "../styles/Home.css";
 import "../styles/Universal.css";
 
-const serverLatestUrl = "http://localhost:8000/nh";
+const serverLatestUrl = "http://localhost:8000/latest";
 
-const renderLatestBooks = (books: String[]) => {
+interface Book {
+  id: String;
+  title: String;
+  cover: string;
+}
+
+const renderLatestBooks = (books: Book[]) => {
   // TODO: dynamically render table header with updated
   // books object
 
   // TODO: replace index in `/title/${index}` to prop of Link
   // with dynamic book id
-  
+
   return (
     <table className="latestTable">
       <thead>
         <tr>
-          <th>Titles</th>
+          <th>ID</th>
+          <th>Title</th>
+          <th>Cover</th>
         </tr>
       </thead>
       <tbody>
-        {books.map((curTitle, index) => (
-          <tr key={index}>
-            <td key={index}>
-              <Link to={`/title/${index}`} className="titleLink">
-                {curTitle}
-              </Link>
-            </td>
-          </tr>
+        {books.map((curBook, index) => (
+          <Link to={`/title/${curBook.id}`} className="titleLink">
+            <tr key={index}>
+              <td>{curBook.id}</td>
+              <td>{curBook.title}</td>
+              <td>
+                <img src={curBook.cover} alt={`cover for book ${curBook.id}`} />
+              </td>
+            </tr>
+          </Link>
         ))}
       </tbody>
     </table>
@@ -40,7 +50,8 @@ const renderLatestBooks = (books: String[]) => {
 };
 
 const Home = () => {
-  const [latestData, setLatestData] = useState([]);
+  // holds data regarding the latest releases
+  const [latestData, setLatestData] = useState<Book[]>([]);
 
   // extract data of latest doujinshi releases
   useEffect(() => {
