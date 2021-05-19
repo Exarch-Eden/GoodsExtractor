@@ -1,8 +1,12 @@
 // third-party libraries
 import React, { ReactElement, useEffect, useState } from "react";
-import ResultsTable from "../components/ResultsTable";
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 
 // components
+import CardLayout from "../components/CardLayout";
+import ResultsCard from "../components/ResultsCard";
+import ResultsTable from "../components/ResultsTable";
 
 // css
 import "../styles/Home.css";
@@ -43,6 +47,8 @@ const Home = (): ReactElement => {
     })();
   }, []);
 
+  // TODO: dynamically calculate page numbers
+
   return (
     <div className="homeContainer">
       <div className="titleContainer verticalPadding">
@@ -54,7 +60,8 @@ const Home = (): ReactElement => {
         </div> */}
         <div className="homeLatestContainer verticalPadding">
           <p>Latest Title Releases</p>
-          <ResultsTable results={latestData} />
+          {/* <ResultsTable results={latestData} /> */}
+          <CardLayout results={latestData} />
           {
             latestData.length !== 0 ? 
             null :
@@ -62,6 +69,13 @@ const Home = (): ReactElement => {
           }
           {/* {renderLatestBooks(latestData)} */}
         </div>
+      </div>
+      <div className="paginationIconsContainer">
+        <ChevronLeftIcon />
+        <p className="curPageNumber pageNumber">1</p>
+        <p className="pageNumber">2</p>
+        <p className="pageNumber">3</p>
+        <ChevronRightIcon />
       </div>
     </div>
   );

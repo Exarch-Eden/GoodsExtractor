@@ -2,6 +2,27 @@
   /* text-align: left; */
 }
 
+.paginationIconsContainer {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1em;
+}
+
+.paginationIconsContainer > * {
+  display: inline-block;
+}
+
+.curPageNumber {
+  border-radius: 50%;
+  background-color: var(--darkgray);
+  color: white;
+}
+
+.pageNumber {
+  width: 24px;
+  height: 24px;
+}
+
 /* .latestTable th {
   text-align: center;
 } */
