@@ -9,6 +9,7 @@
   - Will most likely be local or cache-based
 - Download all images/pages
 - Preview of first few images/pages when navigating to a manga
+- Dark mode
 
 # External features to implement
 
