@@ -33,6 +33,7 @@
   "scripts": {
     "react-start": "react-scripts start",
     "react-build": "react-scripts build",
+    "electron-start": "electron .",
     "electron-build": "electron-builder",
     "release": "npm run react-build && electron-builder --publish=always",
     "build": "npm run react-build && npm run electron-build",
