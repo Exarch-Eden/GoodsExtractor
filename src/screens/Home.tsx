@@ -1,6 +1,6 @@
 // third-party libraries
-import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import React, { ReactElement, useEffect, useState } from "react";
+import ResultsTable from "../components/ResultsTable";
 
 // components
 
@@ -8,56 +8,22 @@ import { Link } from "react-router-dom";
 import "../styles/Home.css";
 import "../styles/Universal.css";
 
+// interfaces
+import { Book } from "../types";
+
 const serverLatestUrl = "http://localhost:8000/latest";
 
-interface Book {
-  id: String;
-  title: String;
-  cover: string;
-}
+const fetchFailedMessage = "Failed to fetch data from server :(";
 
-const renderLatestBooks = (books: Book[]) => {
-  // TODO: dynamically render table header with updated
-  // books object
-
-  // TODO: replace index in `/title/${index}` to prop of Link
-  // with dynamic book id
-
-  return (
-    <table className="latestTable">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Title</th>
-          <th>Cover</th>
-        </tr>
-      </thead>
-      <tbody>
-        {books.map((curBook, index) => (
-          <Link to={`/title/${curBook.id}`} className="titleLink">
-            <tr key={index}>
-              <td>{curBook.id}</td>
-              <td>{curBook.title}</td>
-              <td>
-                <img src={curBook.cover} alt={`cover for book ${curBook.id}`} />
-              </td>
-            </tr>
-          </Link>
-        ))}
-      </tbody>
-    </table>
-  );
-};
-
-const Home = () => {
+const Home = (): ReactElement => {
   // holds data regarding the latest releases
   const [latestData, setLatestData] = useState<Book[]>([]);
 
   // extract data of latest doujinshi releases
   useEffect(() => {
-    // request server to fetch data
     (async () => {
       try {
+        // request server to fetch data
         const res = await fetch(serverLatestUrl);
         const data = await res.json();
 
@@ -65,6 +31,7 @@ const Home = () => {
         console.log("data: ");
         console.log(data);
 
+        // overwrite previous data with newly-fetched data
         setLatestData(data);
       } catch (error) {
         console.log(
@@ -87,7 +54,13 @@ const Home = () => {
         </div> */}
         <div className="homeLatestContainer verticalPadding">
           <p>Latest Title Releases</p>
-          {renderLatestBooks(latestData)}
+          <ResultsTable results={latestData} />
+          {
+            latestData.length !== 0 ? 
+            null :
+            <p className="errorMessage">{fetchFailedMessage}</p>
+          }
+          {/* {renderLatestBooks(latestData)} */}
         </div>
       </div>
     </div>
