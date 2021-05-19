@@ -9,17 +9,14 @@ const BrowserWindow = electron.BrowserWindow;
 let mainWindow;
 
 const bWindowOptions = {
-  width: 800,
-  height: 600,
+  width: 1280,
+  height: 1024,
 };
 
 const createWindow = () => {
   mainWindow = new BrowserWindow(bWindowOptions);
 
-  mainWindow.loadURL(
-    isDev
-      ? "http://localhost:3000"
-      : `file://${path.join(__dirname, "../build/index.html")}`
+  mainWindow.loadURL(`file://${path.join(__dirname, "../build/index.html")}`
   );
 
   mainWindow.on("closed", () => (mainWindow = null));
