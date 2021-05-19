@@ -3,10 +3,12 @@
 - Search bar
 - List layout of search results with cover thumbnail for each manga
   - List layout will show various information in column format
+  - Will most likely swap to a card layout for better UI/UX
 - Filter search results by tags or id
 - Bookmark/Favourite manga or artist
+  - Will most likely be local or cache-based
 - Download all images/pages
-- Preview of first few images/pages
+- Preview of first few images/pages when navigating to a manga
 
 # External features to implement
 
@@ -35,6 +37,8 @@ This concludes the production build and setup instructions.
   - Starts up a local server for the React app on port 3000
 - `npm run react-build`
   - Generates a production build for the React app which can be found in the <b>build</b> folder
+- `npm run react-start`
+  - Starts up the electron app for easy access during development
 - `npm run electron-build`
   - Generates a production build for the Electron desktop app which can be found in the <b>dist</b> folder
 - `npm run build`
