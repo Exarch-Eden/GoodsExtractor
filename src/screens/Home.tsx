@@ -14,7 +14,11 @@ import "../styles/Universal.css";
 // interfaces
 import { Book } from "../types";
 
-const serverLatestUrl = "http://localhost:8000/latest";
+// local constants
+import { serverLatestUrl } from "../backend/ServerURLS";
+
+// const serverLatestUrl = "http://localhost:8000/latest";
+
 
 const fetchFailedMessage = "Failed to fetch data from server :(";
 
