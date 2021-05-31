@@ -38,8 +38,6 @@ This concludes the production build and setup instructions.
   - Starts up a local server for the React app on port 3000
 - `npm run react-build`
   - Generates a production build for the React app which can be found in the <b>build</b> folder
-- `npm run react-start`
-  - Starts up the electron app for easy access during development
 - `npm run electron-build`
   - Generates a production build for the Electron desktop app which can be found in the <b>dist</b> folder
 - `npm run build`
