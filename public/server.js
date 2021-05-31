@@ -8,8 +8,22 @@ const PORT = process.env.PORT || 8000;
 const app = express();
 
 const ENDPOINTS = { default: "/", latest: "/latest", title: "/title" };
+const CODES = {
+  200: 200,
+  400: 400,
+  401: 401,
+  402: 402,
+  403: 403,
+  404: 404,
+  405: 405,
+  406: 406,
+  500: 500,
+  502: 502,
+};
 
-const nHUrl = "https://nhentai.net/";
+const BASE_URL = "https://nhentai.net/";
+const INDIV_TITLE_SUFFIX = "g/";
+const SEARCH_SUFFIX = "search/";
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -70,7 +84,7 @@ app.get(ENDPOINTS.latest, async (req, res) => {
   // get HTML data from r/programming in reddit
   try {
     console.log("fetching data...");
-    const fetchRes = await fetch(nHUrl);
+    const fetchRes = await fetch(BASE_URL);
     const html = await fetchRes.text();
 
     // for testing purposes
@@ -104,22 +118,106 @@ app.get(ENDPOINTS.latest, async (req, res) => {
       });
     });
 
-    console.log("bookTitles:");
-    console.table(bookTitles);
+    // console.log("bookTitles:");
+    // console.table(bookTitles);
+    console.log("successfully fetched data");
   } catch (error) {
     console.log("---------------ERROR--------------\n");
     console.log(error);
     console.log("\n");
-    res.send("Error occurred while fetching data");
+    res.send("Error occurred while fetching data").status(CODES[500]);
   }
 
   res.send(bookTitles);
 });
 
-// app.get("/book", (req, res) => {
-//   const message = "Received GET request to /book endpoint";
-//   res.send(message);
-// });
+app.get(ENDPOINTS.title, async (req, res) => {
+  const message = "Received GET request to /title endpoint";
+  const id = req.query.id;
+  console.log("id: ", id);
+
+  const bookData = {};
+
+  if (!id) {
+    res.send("Id query parameter was not specified").status(CODES[400]);
+  }
+
+  const targetUrl = `${BASE_URL}${INDIV_TITLE_SUFFIX}${id}`;
+
+  // for testing purposes
+  console.log("targetUrl: ", targetUrl);
+
+  // removes any special characters (such as brackets or square brackets)
+  const specialCharRegex = /\(|\)|\[|\]/g;
+
+  // element container for the cover image
+  const coverTag = "#bigcontainer > #cover > a > img";
+
+  // element container for the title, id, artist, and tags of the doujinshi
+  const infoBlockTag = "#bigcontainer > #info-block > #info";
+  const artistTag = `${infoBlockTag} > h1.title > .before`;
+  const titleTag = `${infoBlockTag} > h1.title > .pretty`;
+  // element containing info regarding the parody, language, and translator
+  const othersTag = `${infoBlockTag} > h1.title > .after`;
+
+  // element container for the page images
+  const pageTag = "#thumbnail-container > .thumbs > .thumb-container > a";
+
+  // TODO: change to access the actual page url itself and extract the image from there
+  // rather than using the thumbnail image
+  const imgTag = "img";
+
+  try {
+    console.log("fetching individual title data...");
+    const fetchRes = await fetch(targetUrl);
+    const html = await fetchRes.text();
+
+    // for testing purposes
+    // console.log("res text: \n", resHtml);
+    // console.log("html: \n", html);
+
+    const $ = cheerio.load(html);
+
+    // extract cover image
+    bookData.cover = $(coverTag).attr("data-src");
+
+    // extract other relevant data about the doujinshi
+    bookData.artist = $(artistTag).text().replace(specialCharRegex, "").trim();
+    bookData.title = $(titleTag).text().replace(specialCharRegex, "").trim();
+
+    // initialize pages image url array for bookData object
+    bookData.pages = [];
+
+    // extract the page image urls (thumbnail images for now)
+    // will change to the full-sized images
+    $(pageTag).each((index, element) => {
+      const thumbnailUrl = $(element).find(imgTag).attr("data-src");
+
+      bookData.pages.push(thumbnailUrl);
+    });
+
+    // for extracting images
+    // $(aTag).each((index, element) => {
+    //   const title = $(element).find(captionTag).text();
+    //   const coverUrl = $(element).find(imgTag).attr("data-src");
+
+    //   // get the database id of the current book
+    //   // cut off the first 3 characters, in this case it is "/g/"
+    //   // since we only want the number
+    //   const id = $(element).attr("href").replace(idRegex, "");
+
+    // });
+
+    console.log("successfully fetched individual title data");
+  } catch (error) {
+    console.log("---------------ERROR--------------\n");
+    console.log(error);
+    console.log("\n");
+    res.send("Error occurred while fetching data").status(CODES[500]);
+  }
+
+  res.send(bookData);
+});
 
 // app.get("/artist", (req, res) => {
 //   const message = "Received GET request to /artist endpoint";
