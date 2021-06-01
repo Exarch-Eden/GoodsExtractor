@@ -7,6 +7,7 @@ import Home from '../screens/Home'
 import About from '../screens/About'
 import Search from '../screens/Search'
 import IndividualTitle from '../screens/IndividualTitle'
+import ImagePage from '../screens/ImagePage'
 
 // css
 
@@ -25,6 +26,9 @@ const Routes = () => {
       </Route>
       <Route exact path="/title/:id">
         <IndividualTitle />
+      </Route>
+      <Route exact path="/title/:id/:page">
+        <ImagePage />
       </Route>
     </Switch>
   )
