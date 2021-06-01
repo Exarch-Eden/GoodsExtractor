@@ -10,9 +10,16 @@ import "../styles/Universal.css";
 
 // local constants
 import { serverTitleUrl } from "../backend/ServerURLS";
+import TitleInfo from "../components/TitleInfo";
+import { Book } from "../types";
+import CardLayout from "../components/CardLayout";
+
+const blankTitleData = {
+  id: "-1",
+};
 
 const IndividualTitle = () => {
-  const [titleData, setTitleData] = useState();
+  const [titleData, setTitleData] = useState<Book>(blankTitleData);
 
   // holds the id parameter passed through react-router
   const { id }: { id: string } = useParams();
@@ -22,7 +29,7 @@ const IndividualTitle = () => {
 
   // extract data of id-specified doujinshi
   useEffect(() => {
-    // appends the id of the doujinshi to the url used to 
+    // appends the id of the doujinshi to the url used to
     const urlWithId = `${serverTitleUrl}?id=${id}`;
 
     (async () => {
@@ -33,7 +40,11 @@ const IndividualTitle = () => {
 
         console.log("retrieved title data:");
         console.log(data);
-        
+
+        setTitleData({
+          id: id,
+          ...data,
+        });
       } catch (error) {
         console.log(
           "Error occurred while attempting to fetch data from server"
@@ -42,7 +53,7 @@ const IndividualTitle = () => {
         console.log(error);
       }
     })();
-  }, [])
+  }, [id]);
 
   return (
     <div className="individualTitleContainer">
@@ -51,6 +62,12 @@ const IndividualTitle = () => {
       </div>
       <div className="contentContainer verticalPadding">
         <p>Id retrieved: {id}</p>
+        <div className="infoContainer verticalPadding">
+          <TitleInfo {...titleData} />
+        </div>
+        <div className="pagesContainer verticalPadding">
+          <CardLayout results={titleData.pages || []} />
+        </div>
       </div>
     </div>
   );
