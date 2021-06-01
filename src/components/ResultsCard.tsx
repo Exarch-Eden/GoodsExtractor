@@ -41,20 +41,6 @@ const ResultsCard = ({ id, title, cover }: Book): ReactElement => {
   return (
     <Link to={`/title/${id}`}>
       <Card className={classes.root}>
-        {/* <CardHeader
-        // avatar={
-        //   <Avatar aria-label="recipe" className={classes.avatar}>
-        //     R
-        //   </Avatar>
-        // }
-        // action={
-        //   <IconButton aria-label="settings">
-        //     <MoreVertIcon />
-        //   </IconButton>
-        // }
-        title="Shrimp and Chorizo Paella"
-        subheader="September 14, 2016"
-      /> */}
         <CardMedia
           className={classes.media}
           image={cover}

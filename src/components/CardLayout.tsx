@@ -9,23 +9,35 @@ import "../styles/CardLayout.css";
 import "../styles/Universal.css";
 
 // interfaces
-import { Book } from "../types";
+import { Book, Pages } from "../types";
+import PageThumbnail from "./PageThumbnail";
 import ResultsCard from "./ResultsCard";
 
 type CardLayoutProps = {
-  results: Book[];
+  results: Book[] | Pages;
+  id?: string;
 };
 
-const CardLayout = ({ results }: CardLayoutProps): ReactElement => {
+const CardLayout = ({ results, id }: CardLayoutProps): ReactElement => {
   return (
     <div className="cardLayoutContainer">
-      {results.map((curResult, index) => {
+      {results.map((curResult: Book | string, index: number) => {
         // TODO: check for element type before rendering components
         // maybe a switch case:
         // case "book"
         // case "artist"
         // etc.
 
+        // if the element is a string, it is meant to be the src value of
+        // a page thumbnail image
+        if (typeof curResult === "string") {
+          return (
+            // <img className="pageImage" src={curResult} alt={`page ${index}`} />
+            <PageThumbnail thumbnailSrc={curResult} pageNumber={index} id={id} />
+          )
+        }
+
+        // card component for search or latest doujinshi results
         return <ResultsCard {...curResult} key={index} />;
       })}
     </div>
