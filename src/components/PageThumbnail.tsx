@@ -28,8 +28,11 @@ const PageThumbnail = ({
 }: PageThumbnailProps): ReactElement => {
   const dummyCover = "https://dummyimage.com/200x300/000/fff";
 
+  // link to the page containing the full-sized image
+  const pageLink = id !== "-1" ? `/title/${id}/${pageNumber}` : `/404`;
+
   return (
-    <Link to={`/title/${id}/${pageNumber}`}>
+    <Link to={pageLink}>
       <img
         className="pageImage"
         src={thumbnailSrc || dummyCover}

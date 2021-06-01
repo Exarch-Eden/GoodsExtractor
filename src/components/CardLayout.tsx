@@ -33,7 +33,7 @@ const CardLayout = ({ results, id }: CardLayoutProps): ReactElement => {
         if (typeof curResult === "string") {
           return (
             // <img className="pageImage" src={curResult} alt={`page ${index}`} />
-            <PageThumbnail thumbnailSrc={curResult} pageNumber={index} id={id} />
+            <PageThumbnail thumbnailSrc={curResult} pageNumber={index} id={id || "-1"} />
           )
         }
 

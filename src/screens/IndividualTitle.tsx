@@ -66,7 +66,7 @@ const IndividualTitle = () => {
           <TitleInfo {...titleData} />
         </div>
         <div className="pagesContainer verticalPadding">
-          <CardLayout results={titleData.pages || []} />
+          <CardLayout results={titleData.pages || []} id={id} />
         </div>
       </div>
     </div>
