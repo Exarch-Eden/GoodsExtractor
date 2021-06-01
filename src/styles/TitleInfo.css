@@ -1,0 +1,30 @@
+.titleInfoContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content:space-between;
+  /* justify-content:center; */
+  /* max-width: 1200px; */
+  margin: auto;
+  background-color: var(--darkgray);
+  color: white;
+}
+
+.titleInfoContainer .coverContainer,
+.otherInfoContainer {
+  width: 50%;
+}
+
+.indivTitleCoverImage {
+  max-width: 350px;
+  height: auto;
+}
+
+.otherInfoContainer {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.otherInfoContainer > * {
+  margin-bottom: 20px;
+}
