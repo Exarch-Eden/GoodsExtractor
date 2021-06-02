@@ -132,10 +132,15 @@ app.get(ENDPOINTS.latest, async (req, res) => {
 });
 
 app.get(ENDPOINTS.title, async (req, res) => {
+  // for testing purposes
   const message = "Received GET request to /title endpoint";
   const id = req.query.id;
+
+  // for testing purposes
   console.log("id: ", id);
 
+  // holds the data extracted from the website
+  // data is relevant to an id-specified doujinshi
   const bookData = {};
 
   if (!id) {
@@ -149,6 +154,10 @@ app.get(ENDPOINTS.title, async (req, res) => {
 
   // removes any special characters (such as brackets or square brackets)
   const specialCharRegex = /\(|\)|\[|\]/g;
+
+  // regex for extracting full-sized images from thumbnail src value
+  const fullSizeFirstTRegex = /t\.nhentai\.net/g;
+  const fullSizeLastTRegex = /\/[0-9]t/g;
 
   // element container for the cover image
   const coverTag = "#bigcontainer > #cover > a > img";
@@ -185,7 +194,9 @@ app.get(ENDPOINTS.title, async (req, res) => {
     bookData.artist = $(artistTag).text().replace(specialCharRegex, "").trim();
     bookData.title = $(titleTag).text().replace(specialCharRegex, "").trim();
 
-    // initialize pages image url array for bookData object
+    // initialize page thumbnail images url array for bookData object
+    bookData.thumbnails = [];
+
     bookData.pages = [];
 
     // extract the page image urls (thumbnail images for now)
@@ -193,7 +204,13 @@ app.get(ENDPOINTS.title, async (req, res) => {
     $(pageTag).each((index, element) => {
       const thumbnailUrl = $(element).find(imgTag).attr("data-src");
 
-      bookData.pages.push(thumbnailUrl);
+      // extracts the full-sized versions of the thumbnail images
+      const fullSizeUrl = thumbnailUrl
+        .replace(fullSizeFirstTRegex, "i.nhentai.net")
+        .replace(fullSizeLastTRegex, `/${index + 1}`);
+
+      bookData.thumbnails.push(thumbnailUrl);
+      bookData.pages.push(fullSizeUrl);
     });
 
     // for extracting images
