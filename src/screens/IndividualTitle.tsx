@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 // components
+import TitleInfo from "../components/TitleInfo";
+import CardLayout from "../components/CardLayout";
 
 // css
 import "../styles/IndividualTitle.css";
@@ -10,9 +12,13 @@ import "../styles/Universal.css";
 
 // local constants
 import { serverTitleUrl } from "../backend/ServerURLS";
-import TitleInfo from "../components/TitleInfo";
-import { Book } from "../types";
-import CardLayout from "../components/CardLayout";
+
+// types
+import { Book, SessionData } from "../types";
+
+type IndividualTitleRouteParams = {
+  id: string;
+};
 
 const blankTitleData = {
   id: "-1",
@@ -22,7 +28,7 @@ const IndividualTitle = () => {
   const [titleData, setTitleData] = useState<Book>(blankTitleData);
 
   // holds the id parameter passed through react-router
-  const { id }: { id: string } = useParams();
+  const { id }: IndividualTitleRouteParams = useParams();
 
   // for testing purposes
   console.log("id: ", id);
@@ -45,6 +51,14 @@ const IndividualTitle = () => {
           id: id,
           ...data,
         });
+
+        const sessionData: SessionData = {
+          id: id,
+          pages: data.pages,
+        };
+
+        // store page urls in session storage
+        window.sessionStorage.setItem("pages", JSON.stringify(sessionData));
       } catch (error) {
         console.log(
           "Error occurred while attempting to fetch data from server"
@@ -66,7 +80,7 @@ const IndividualTitle = () => {
           <TitleInfo {...titleData} />
         </div>
         <div className="pagesContainer verticalPadding">
-          <CardLayout results={titleData.pages || []} id={id} />
+          <CardLayout results={titleData.thumbnails || []} id={id} />
         </div>
       </div>
     </div>
