@@ -47,7 +47,8 @@ const ImagePage = () => {
         // paramter from router,
         // then extract the page url
         if (sessionData.id === id) {
-          setImageSrc(sessionData.pages[parseInt(pageNumber)]);
+          const index = parseInt(pageNumber) - 1;
+          setImageSrc(sessionData.pages[index]);
         }
       } catch (error) {
         console.log(error);

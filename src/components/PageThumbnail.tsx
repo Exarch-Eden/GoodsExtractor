@@ -18,15 +18,17 @@ import { Link } from "react-router-dom";
 type PageThumbnailProps = {
   thumbnailSrc: string;
   id: string;
-  pageNumber: number;
+  index: number;
 };
 
 const PageThumbnail = ({
   thumbnailSrc,
   id,
-  pageNumber,
+  index,
 }: PageThumbnailProps): ReactElement => {
   const dummyCover = "https://dummyimage.com/200x300/000/fff";
+
+  const pageNumber = index + 1;
 
   // link to the page containing the full-sized image
   const pageLink = id !== "-1" ? `/title/${id}/${pageNumber}` : `/404`;
@@ -36,7 +38,7 @@ const PageThumbnail = ({
       <img
         className="pageImage"
         src={thumbnailSrc || dummyCover}
-        alt={`page ${pageNumber}`}
+        alt={`page ${index}`}
       />
     </Link>
   );

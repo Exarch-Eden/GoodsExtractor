@@ -27,13 +27,14 @@ const CardLayout = ({ results, id }: CardLayoutProps): ReactElement => {
         // case "book"
         // case "artist"
         // etc.
+        // haha, TypeScript doesn't have a function for that :(
 
         // if the element is a string, it is meant to be the src value of
         // a page thumbnail image
         if (typeof curResult === "string") {
           return (
             // <img className="pageImage" src={curResult} alt={`page ${index}`} />
-            <PageThumbnail thumbnailSrc={curResult} pageNumber={index} id={id || "-1"} />
+            <PageThumbnail thumbnailSrc={curResult} index={index} id={id || "-1"} />
           )
         }
 
