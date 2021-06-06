@@ -157,7 +157,9 @@ app.get(ENDPOINTS.title, async (req, res) => {
 
   // regex for extracting full-sized images from thumbnail src value
   const fullSizeFirstTRegex = /t\.nhentai\.net/g;
-  const fullSizeLastTRegex = /\/[0-9]t/g;
+  const fullSizeLastTRegex = /\/[0-9]+t/g;
+  // old code
+  // const fullSizeLastTRegex = /\/[0-9]t/g;
 
   // element container for the cover image
   const coverTag = "#bigcontainer > #cover > a > img";
