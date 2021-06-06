@@ -2,6 +2,7 @@
 // third-party libraries
 import React, { useEffect, useState } from "react";
 import { Route, Switch, useParams } from "react-router-dom";
+import PageNumbers from "../components/PageNumbers";
 
 // components
 
@@ -28,8 +29,15 @@ const dummyImageLink = "";
 
 const ImagePage = () => {
   const [imageSrc, setImageSrc] = useState("");
+  const [maxPageNumber, setMaxPageNumber] = useState(1);
 
-  const { id, page: pageNumber }: ImagePageRouteParams = useParams();
+  // for testing purposes
+  // console.log("ImagePage RENDER");
+  console.log("imageSrc: ", imageSrc);
+
+  const { id, page }: ImagePageRouteParams = useParams();
+
+  const pageNumber = parseInt(page);
 
   useEffect(() => {
     // attempt to get page url from session data
@@ -38,6 +46,7 @@ const ImagePage = () => {
     // if sessionData is available, parse and extract respective page url based on
     // page number value
     if (sessionDataStringified) {
+      // for testing purposes
       console.log("found session storage data");
       try {
         // session data string formatted to JSON
@@ -47,8 +56,9 @@ const ImagePage = () => {
         // paramter from router,
         // then extract the page url
         if (sessionData.id === id) {
-          const index = parseInt(pageNumber) - 1;
+          const index = pageNumber - 1;
           setImageSrc(sessionData.pages[index]);
+          setMaxPageNumber(sessionData.pages.length);
         }
       } catch (error) {
         console.log(error);
@@ -59,10 +69,24 @@ const ImagePage = () => {
     } else {
       console.log("failed to find session storage data");
       console.log("Resorting to local server GET image request");
-      
+
       fetchImagePageData();
     }
   }, [id]);
+
+  useEffect(() => {
+    // attempt to get page url from session data
+    const sessionDataStringified = window.sessionStorage.getItem("pages");
+
+    if (sessionDataStringified) {
+      // session data string formatted to JSON
+      const sessionData: SessionData = JSON.parse(sessionDataStringified);
+      const index = pageNumber - 1;
+      setImageSrc(sessionData.pages[index]);
+    }
+  }, [pageNumber]);
+
+  const pathNoPageNumber = `/title/${id}/`;
 
   return (
     <div>
@@ -70,8 +94,9 @@ const ImagePage = () => {
         <p>Image Page</p>
       </div>
       <div className="contentContainer verticalPadding">
-        <p>id {id}</p>
-        <p>page number {pageNumber}</p>
+        {/* for testing purposes */}
+        {/* <p>id {id}</p>
+        <p>page number {pageNumber}</p> */}
         {imageSrc !== "" ? (
           <img
             className="fullImage"
@@ -80,6 +105,11 @@ const ImagePage = () => {
           />
         ) : null}
       </div>
+      <PageNumbers
+        path={pathNoPageNumber}
+        curPageNumber={pageNumber}
+        maxPageNumber={maxPageNumber}
+      />
     </div>
   );
 };

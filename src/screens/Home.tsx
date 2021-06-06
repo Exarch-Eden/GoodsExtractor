@@ -52,6 +52,13 @@ const Home = (): ReactElement => {
 
   // TODO: dynamically calculate page numbers
 
+  const dummyData = [
+    {
+      id: "1234",
+      title: "yeet",
+    }
+  ]
+
   return (
     <div className="homeContainer">
       <div className="titleContainer verticalPadding">
@@ -64,6 +71,7 @@ const Home = (): ReactElement => {
         <div className="homeLatestContainer verticalPadding">
           <p>Latest Title Releases</p>
           {/* <ResultsTable results={latestData} /> */}
+          {/* <CardLayout results={dummyData} /> */}
           <CardLayout results={latestData} />
           {latestData.length !== 0 ? null : (
             <p className="errorMessage">{fetchFailedMessage}</p>
@@ -71,7 +79,7 @@ const Home = (): ReactElement => {
           {/* {renderLatestBooks(latestData)} */}
         </div>
       </div>
-      <PageNumbers />
+      {/* <PageNumbers /> */}
     </div>
   );
 };
