@@ -29,21 +29,10 @@ const PageNumbers = ({
   const pathToLeft = path + `${prevPageNumber}`;
   const pathToRight = path + `${nextPageNumber}`;
 
+  // for testing purposes
   console.log("maxPageNumber: ", maxPageNumber);
-
   // console.log("pathToLeft: ", pathToLeft);
   // console.log("pathToRight: ", pathToRight);
-
-  // TODO: set curPageNumber as a number state hook in components this one
-  //       depends on
-
-  // TODO: if current page number is already the first page,
-  //       remove left arrow icon.
-  //       also do this for the right arrow icon
-
-  // TODO: do not allow the current page number to be clicked
-
-  // TODO: make page numbers clickable and functioning links to respective page
 
   return (
     <div className="paginationIconsContainer">
@@ -54,7 +43,7 @@ const PageNumbers = ({
           </Link>
         </>
       ) : null}
-      {renderPagination(curPageNumber, maxPageNumber)}
+      {renderPagination(curPageNumber, maxPageNumber, path)}
       {curPageNumber < maxPageNumber ? (
         <>
           <Link to={pathToRight} className="titleLink">
@@ -66,31 +55,43 @@ const PageNumbers = ({
   );
 };
 
-const renderPagination = (curPageNumber: number, maxPageNumber: number) => {
+const renderPagination = (
+  curPageNumber: number,
+  maxPageNumber: number,
+  path: string
+) => {
   const prevPageNumber = curPageNumber - 1;
   const nextPageNumber = curPageNumber + 1;
 
   switch (curPageNumber) {
-    case 1: // first page
+    case 1: // current page is first page
       return (
         <>
           <p className="curPageNumber pageNumber">{curPageNumber}</p>
           {nextPageNumber <= maxPageNumber ? (
-            <p className="pageNumber">{nextPageNumber}</p>
+            <Link to={`${path}${nextPageNumber}`} className="titleLink">
+              <p className="pageNumber">{nextPageNumber}</p>
+            </Link>
           ) : null}
           {nextPageNumber + 1 <= maxPageNumber ? (
-            <p className="pageNumber">{nextPageNumber + 1}</p>
+            <Link to={`${path}${nextPageNumber + 1}`} className="titleLink">
+              <p className="pageNumber">{nextPageNumber + 1}</p>
+            </Link>
           ) : null}
         </>
       );
-    case maxPageNumber: // last page
+    case maxPageNumber: // current page is last page
       return (
         <>
           {prevPageNumber - 1 >= 1 ? (
-            <p className="pageNumber">{prevPageNumber - 1}</p>
+            <Link to={`${path}${prevPageNumber - 1}`} className="titleLink">
+              <p className="pageNumber">{prevPageNumber - 1}</p>
+            </Link>
           ) : null}
           {prevPageNumber >= 1 ? (
-            <p className="pageNumber">{prevPageNumber}</p>
+            <Link to={`${path}${prevPageNumber}`} className="titleLink">
+              <p className="pageNumber">{prevPageNumber}</p>
+            </Link>
           ) : null}
           <p className="curPageNumber pageNumber">{curPageNumber}</p>
         </>
@@ -98,9 +99,13 @@ const renderPagination = (curPageNumber: number, maxPageNumber: number) => {
     default:
       return (
         <>
-          <p className="pageNumber">{prevPageNumber}</p>
+          <Link to={`${path}${prevPageNumber}`} className="titleLink">
+            <p className="pageNumber">{prevPageNumber}</p>
+          </Link>
           <p className="curPageNumber pageNumber">{curPageNumber}</p>
-          <p className="pageNumber">{nextPageNumber}</p>
+          <Link to={`${path}${nextPageNumber}`} className="titleLink">
+            <p className="pageNumber">{nextPageNumber}</p>
+          </Link>
         </>
       );
   }
