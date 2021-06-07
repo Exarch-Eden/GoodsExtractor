@@ -1,0 +1,25 @@
+.titleContainer {
+  background-color: var(--teal);
+}
+
+.contentContainer {
+  
+}
+
+p {
+  margin: 0;
+}
+
+.verticalPadding {
+  padding-top: 1em;
+  padding-bottom: 1em;
+}
+
+.titleLink {
+  text-decoration: none;
+  color: black;
+}
+
+.titleLink:hover {
+  color: var(--gray);
+}

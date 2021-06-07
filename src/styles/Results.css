@@ -1,0 +1,16 @@
+.resultsTable {
+  text-align: left;
+  margin: auto;
+  border-collapse: collapse;
+  width: auto;
+}
+
+.resultsTable, .resultsTable th, .resultsTable td {
+  border: 1px solid black;
+} 
+
+.tableCoverImage {
+  /* max-width: 100%; */
+  max-width: 250px;
+  height: auto;
+}
