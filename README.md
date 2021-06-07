@@ -14,7 +14,7 @@ Trello board: https://trello.com/b/RFmf9DeZ/goods-extractor
 
 # External features to implement
 
-- Node server hosted in Heroku to catch GET requests made by client app
+- ~~Node server hosted in Heroku to catch GET requests made by client app~~ (No longer needed as Electron app runs a local server on start-up)
 
 # Production build and setup instructions
 
@@ -30,7 +30,11 @@ Trello board: https://trello.com/b/RFmf9DeZ/goods-extractor
 4. Inside <b>dist</b> folder, run the executable, <b>GoodsExtractor Setup 0.1.0.exe</b>
    <br>
    <br>
+   If prompted to give network access to the application, do so. This is a one-time prompt and is needed for the local server to function properly.
+   <br>
+   <br>
    At this point, the Electron desktop application should be running.
+
 
 This concludes the production build and setup instructions.
 
