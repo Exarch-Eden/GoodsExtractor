@@ -105,7 +105,7 @@ app.get(ENDPOINTS.latest, async (req, res) => {
   try {
     await restLatest.getLatest(res, BASE_URL);
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 });
 
@@ -129,29 +129,48 @@ app.get(ENDPOINTS.title, async (req, res) => {
   try {
     await restTitle.getTitle(res, targetUrl);
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 });
 
 app.get(ENDPOINTS.search, async (req, res) => {
-  const search = req.query.search;
+  // TODO: add query parameter for page number
+  // if page number parameter is defined, 
+  // append the value to the targetUrl:
+  // &page={value}
+
+  // used for replacing whitespace characters with +
+  const searchInputRegex = /\s/g;
+
+  const searchPreCheck = req.query.search;
 
   // for testing purposes
-  console.log("search input: ", search);
+  console.log("search input: ", searchPreCheck);
 
-  if (!search) {
+  // check to see if search input is defined
+  // return error 400 if not
+  if (!searchPreCheck) {
     res.send("search query parameter was not specified").status(CODES[400]);
   }
 
-  const targetUrl = `${BASE_URL}${SEARCH_SUFFIX}?q=${search}`;
+  // after confirming search input is indeed a string,
+  // replace any whitespace characters with +
+  const searchPostCheck = searchPreCheck.replace(searchInputRegex, "+");
 
+  const targetUrl = `${BASE_URL}${SEARCH_SUFFIX}?q=${searchPostCheck}`;
+
+  // for testing purposes
   console.log("targetUrl: ", targetUrl);
+  // res.send(targetUrl);
   
   try {
     await restSearch.getSearch(res, targetUrl);
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
+
+  // for testing purposes
+  // console.log("end of search get request");
 });
 
 // app.get("/artist", (req, res) => {
@@ -161,4 +180,4 @@ app.get(ENDPOINTS.search, async (req, res) => {
 
 http
   .createServer(app)
-  .listen(PORT, () => console.log(`App listening on http://localhost:${PORT}`));
+  .listen(PORT, () => console.log(`Server listening on http://localhost:${PORT}`));
