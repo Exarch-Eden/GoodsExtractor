@@ -1,20 +1,46 @@
-# Features to implement
+<b>Note</b>: In this readme file, the word "title" refers to "manga."
 
-- Search functionality
-- Card layout of search results with cover thumbnail for each manga (very similar to Home page)
-  - Layout will show various information such as title and a preview of some tags related to the manga
-- Filter search results by tags or id
+# Features to implement
+`Core features` left to implement:
+- Download all images/pages of an individual title
+- Home and Search screen pagination
+- Tag and other relevant data (e.g. parody, author, group) fetching for individual titles in the Individual Title screen
+- Adding to the above point, clickable tags that navigate to the respective search results on click
 - Bookmark/Favourite manga or artist
   - Will most likely be local or cache-based
-- Download all images/pages of a specific manga
-- Preview of first few images/pages when navigating to a manga
 - Dark mode
+  - Or just straight up make it the default and only theme
+
+`Other features` to implement:
+- Id search input filter in Search screen
+- Tag filter in Search screen
+- Cards will show further information than the cover and title such as a preview of some tags related to the manga in the Home and Search screen
+  - Possibly shown on cursor hover over card
+
+`Quality-of-life changes` to implement:
+- Keyboard input (WASD and arrow keys) and left/right image click page navigation when browsing pages of an individual title
+- Back to Individual Title screen button when browsing pages of an individual title
+- Keyboard input (Backspace) for previous screen navigation (e.g. go back to Home screen from Individual Title screen)
 
 Trello board: https://trello.com/b/RFmf9DeZ/goods-extractor
 
 # External features to implement
 
 - ~~Node server hosted in Heroku to catch GET requests made by client app~~ (No longer needed as Electron app runs a local server on start-up)
+
+# Releases
+Build notes for release versions.
+
+## Ver 1.0
+Minimum viable product achieved.
+
+### Achieved Implementations
+As of this version, the desktop application is able to:
+- Get the first page of latest title releases in the Home screen
+- Get the first page of most relevant search results in the Search screen
+- Get information and thumbnail previews of an individual title (in the Individual Title screen) after clicking on its cover image from the Home or Search screen
+- Click on a thumbnail image in the Individual Title screen and navigate directly to that page containing the full-sized image of said thumbnail belonging to the individual title
+- Basic page navigation between full-sized images belonging to an individual title (Image Page screen) via arrow keys and small pagination (e.g. pagination < 1 2 3 >)
 
 # Production build and setup instructions
 
@@ -58,3 +84,4 @@ Custom node commands with several different functionalities to facilitate develo
 - `npm run start`
   - Similar to `npm run react-start` but also concurrently runs the electron app
   - <span style="color: red;"><b>Warning</b></span>: This command is bugged and does not execute the electron app for development as intended. Do not use.
+ 
