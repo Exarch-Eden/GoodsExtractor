@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
 // third-party libraries
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Route, Switch, useParams } from "react-router-dom";
 import PageNumbers from "../components/PageNumbers";
 
@@ -8,6 +8,7 @@ import PageNumbers from "../components/PageNumbers";
 
 // css
 import "../styles/Universal.css";
+import "../styles/ImagePage.css";
 
 // types
 import { Pages, SessionData } from "../types";
@@ -15,15 +16,6 @@ import { Pages, SessionData } from "../types";
 type ImagePageRouteParams = {
   id: string;
   page: string;
-};
-
-const fetchImagePageData = async () => {
-  // uncomment later
-  // const res = await fetch("");
-  // const data = await res.json();
-
-  // for testing purposes
-  console.log("fetchImagePageData()");
 };
 
 const ImagePage = () => {
@@ -34,15 +26,55 @@ const ImagePage = () => {
   // holds the maximum page number available for this specific title
   // used mainly for pagination
   const [maxPageNumber, setMaxPageNumber] = useState(1);
+  // holds the current page number
+  const [pageNumber, setPageNumber] = useState(1);
 
   // for testing purposes
-  // console.log("ImagePage RENDER");
-  console.log("imageSrc: ", imageSrc);
+  console.log("ImagePage RENDER");
+  // console.log("imageSrc: ", imageSrc);
 
   const { id, page }: ImagePageRouteParams = useParams();
 
+  useEffect(() => {
+    setPageNumber(parseInt(page));
+  }, [page]);
+
+  useEffect(() => {
+    console.log("added event listener");
+    const pageKeyHandler = (event: any) => {
+      console.log(`${pageNumber}, max: ${maxPageNumber}`);
+      if (pageNumber < maxPageNumber) {
+        // navigate to next page
+        if (event.key === "D" || event.key === "ArrowRight") {
+          console.log(">");
+
+          setPageNumber(pageNumber + 1);
+        }
+      }
+      if (pageNumber > 1) {
+        // navigate to previous page
+        if (event.key === "A" || event.key === "ArrowLeft") {
+          console.log("<");
+
+          setPageNumber(pageNumber - 1);
+        }
+      }
+    };
+
+    window.addEventListener("keydown", pageKeyHandler);
+
+    // addPageKeyListeners(pageNumber, maxPageNumber, setPageNumber);
+
+    return () => {
+      window.removeEventListener("keydown", pageKeyHandler);
+    };
+  }, [pageNumber, maxPageNumber]);
   // number parsed from stringified parameter value
-  const pageNumber = parseInt(page);
+
+  // old code
+  // const pageNumber = parseInt(page);
+
+  // listen for left and right arrow keys or WASD keys
 
   // initial session data extraction triggered by change in id value
   // id is representative of one title
@@ -87,6 +119,8 @@ const ImagePage = () => {
     const index = pageNumber - 1;
     setImageSrc(imageArray[index]);
 
+    // addPageKeyListeners(pageNumber, maxPageNumber, setPageNumber);
+
     // old code
     // // attempt to get page url from session data
     // const sessionDataStringified = window.sessionStorage.getItem("pages");
@@ -127,6 +161,42 @@ const ImagePage = () => {
       />
     </div>
   );
+};
+
+const addPageKeyListeners = (
+  curPageNumber: number,
+  maxPageNumber: number,
+  setPageNumber: React.Dispatch<React.SetStateAction<number>>
+) => {
+  window.addEventListener("keydown", (event) => {
+    console.log(`${curPageNumber}, max: ${maxPageNumber}`);
+
+    if (curPageNumber < maxPageNumber) {
+      // navigate to next page
+      if (event.key === "D" || event.key === "ArrowRight") {
+        console.log(">");
+
+        setPageNumber(curPageNumber + 1);
+      }
+    }
+    if (curPageNumber > 1) {
+      // navigate to previous page
+      if (event.key === "A" || event.key === "ArrowLeft") {
+        console.log("<");
+
+        setPageNumber(curPageNumber - 1);
+      }
+    }
+  });
+};
+
+const fetchImagePageData = async () => {
+  // uncomment later
+  // const res = await fetch("");
+  // const data = await res.json();
+
+  // for testing purposes
+  console.log("fetchImagePageData()");
 };
 
 export default ImagePage;
