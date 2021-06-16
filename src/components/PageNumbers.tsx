@@ -30,7 +30,7 @@ const PageNumbers = ({
   const pathToRight = path + `${nextPageNumber}`;
 
   // for testing purposes
-  console.log("maxPageNumber: ", maxPageNumber);
+  // console.log("maxPageNumber: ", maxPageNumber);
   // console.log("pathToLeft: ", pathToLeft);
   // console.log("pathToRight: ", pathToRight);
 
