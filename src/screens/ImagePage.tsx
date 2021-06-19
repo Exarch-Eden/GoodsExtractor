@@ -2,9 +2,9 @@
 // third-party libraries
 import React, { useCallback, useEffect, useState } from "react";
 import { Route, Switch, useParams } from "react-router-dom";
-import PageNumbers from "../components/PageNumbers";
 
 // components
+import PageNumbers from "../components/Pagination/PageNumbers";
 
 // css
 import "../styles/Universal.css";
