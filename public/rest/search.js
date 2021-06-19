@@ -3,6 +3,10 @@ const fetch = require("node-fetch");
 const CODES = require("../constants/statusCodes").CODES;
 
 exports.getSearch = async (res, targetUrl) => {
+  // data object to be sent
+  // holds the book titles and the max page number value
+  const sendData = {};
+  
   // holds the titles of doujinshis found in the respective search page
   const bookTitles = [];
 
@@ -16,6 +20,8 @@ exports.getSearch = async (res, targetUrl) => {
   const captionTag = ".caption";
   // holds the cover image
   const imgTag = "img";
+  // anchor for the last page pagination icon
+  const maxPageTag = ".pagination > .last";
 
   try {
     console.log("fetching search data...");
@@ -37,6 +43,11 @@ exports.getSearch = async (res, targetUrl) => {
       });
     });
 
+    const maxPageNumber = $(maxPageTag).attr("href");
+
+    sendData.bookTitles = bookTitles;
+    sendData.maxPageNumber = maxPageNumber;
+
     console.log("successfully fetched search data");
   } catch (error) {
     console.log("---------------ERROR--------------\n");
@@ -45,5 +56,5 @@ exports.getSearch = async (res, targetUrl) => {
     res.send("Error occurred while fetching search data").status(CODES[500]);
   }
 
-  res.send(bookTitles);
+  res.send(sendData);
 };
