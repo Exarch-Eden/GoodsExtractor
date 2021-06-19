@@ -1,9 +1,11 @@
 // third-party libraries
-import React, { ReactElement, useEffect, useState } from "react";
+import React, { ReactElement, useCallback, useEffect, useState } from "react";
+import { useParams } from "react-router";
 
 // components
 import CardLayout from "../components/CardLayout";
-import PageNumbers from "../components/PageNumbers";
+import PageNumbers from "../components/Pagination/PageNumbers";
+import PageNumbersLocal from "../components/Pagination/PageNumbersLocal";
 import ResultsCard from "../components/ResultsCard";
 import ResultsTable from "../components/ResultsTable";
 
@@ -19,45 +21,66 @@ import { serverLatestUrl } from "../backend/ServerURLS";
 
 // const serverLatestUrl = "http://localhost:8000/latest";
 
+type HomeRouteParams = {
+  page?: string;
+};
 
 const fetchFailedMessage = "Failed to fetch data from server :(";
+
+const paginationPath = "/";
+
+/**
+ * Placeholder value for the max page number.
+ * As of the 15th of June 2021, the max page number is 14274
+ */
+const maxPageNumberPlaceholder = 14274;
 
 const Home = (): ReactElement => {
   // holds data regarding the latest releases
   const [latestData, setLatestData] = useState<Book[]>([]);
+  // holds the maximum page number available for this specific title
+  // used mainly for pagination
+  const [maxPageNumber, setMaxPageNumber] = useState(maxPageNumberPlaceholder);
+  // holds the current page number
+  const [pageNumber, setPageNumber] = useState(1);
+
+  const onChange = useCallback((newPageNumber: number) => {
+    setPageNumber(newPageNumber);
+  }, []);
+
+  // const { page }: HomeRouteParams = useParams();
+
+  // // change the page number if it is specified in the router params
+  // useEffect(() => {
+  //   if (page) {
+  //     setPageNumber(parseInt(page));
+  //   }
+  // }, [page]);
+
+  // initial fetch (this doesn't actually fetch only once)
+  // useEffect(() => {
+  //   console.log("initial fetch");
+  // }, [])
 
   // extract data of latest doujinshi releases
   useEffect(() => {
     (async () => {
       try {
-        // request server to fetch data
-        const res = await fetch(serverLatestUrl);
-        const data = await res.json();
-
-        // for testing purposes
-        console.log("data: ");
-        console.log(data);
-
         // overwrite previous data with newly-fetched data
-        setLatestData(data);
+        // const retrievedData = await fetchLatestData();
+        const retrievedData = await fetchLatestData(pageNumber);
+        if (retrievedData) {
+          setLatestData(retrievedData);
+        }
       } catch (error) {
         console.log(
-          "Error occurred while attempting to fetch data from server"
+          "Error occurred in outer trycatch block of fetchLatestData()"
         );
 
-        console.log(error);
+        console.error(error);
       }
     })();
-  }, []);
-
-  // TODO: dynamically calculate page numbers
-
-  const dummyData = [
-    {
-      id: "1234",
-      title: "yeet",
-    }
-  ]
+  }, [pageNumber]);
 
   return (
     <div className="homeContainer">
@@ -65,23 +88,56 @@ const Home = (): ReactElement => {
         <p>Home Page</p>
       </div>
       <div className="contentContainer verticalPadding">
-        {/* <div className="homePopularContainer verticalPadding">
-          <p>Popular</p>
-        </div> */}
         <div className="homeLatestContainer verticalPadding">
           <p>Latest Title Releases</p>
-          {/* <ResultsTable results={latestData} /> */}
-          {/* <CardLayout results={dummyData} /> */}
           <CardLayout results={latestData} />
           {latestData.length !== 0 ? null : (
             <p className="errorMessage">{fetchFailedMessage}</p>
           )}
-          {/* {renderLatestBooks(latestData)} */}
         </div>
       </div>
-      {/* <PageNumbers /> */}
+      <PageNumbersLocal
+        curPageNumber={pageNumber}
+        maxPageNumber={maxPageNumber}
+        onChange={onChange}
+      />
+      {/* <PageNumbers
+        path={paginationPath}
+        curPageNumber={pageNumber}
+        maxPageNumber={maxPageNumber}
+      /> */}
     </div>
   );
+};
+
+const fetchLatestData = async (pageNumber: number) => {
+  // local server endpoint to fetch
+  // if specified page number is greater than 1, append query parameter
+  // otherwise, use default endpoint url
+  // const targetUrl = serverLatestUrl;
+  const targetUrl =
+    pageNumber > 1 ? `${serverLatestUrl}?page=${pageNumber}` : serverLatestUrl;
+
+  // holds the return data object
+  let returnData = undefined;
+
+  try {
+    // request server to fetch data
+    const res = await fetch(targetUrl);
+    const data = await res.json();
+
+    // for testing purposes
+    console.log("data: ");
+    console.log(data);
+
+    // overwrite previous data with newly-fetched data
+    returnData = data;
+  } catch (error) {
+    console.log("Error occurred while attempting to fetch data from server");
+    console.error(error);
+  }
+
+  return returnData;
 };
 
 export default Home;
