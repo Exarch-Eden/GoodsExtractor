@@ -40,7 +40,7 @@ const Home = (): ReactElement => {
   const [latestData, setLatestData] = useState<Book[]>([]);
   // holds the maximum page number available for this specific title
   // used mainly for pagination
-  const [maxPageNumber, setMaxPageNumber] = useState(maxPageNumberPlaceholder);
+  const [maxPageNumber, setMaxPageNumber] = useState(1);
   // holds the current page number
   const [pageNumber, setPageNumber] = useState(1);
 
@@ -62,25 +62,28 @@ const Home = (): ReactElement => {
   //   console.log("initial fetch");
   // }, [])
 
+  const fetchData = useCallback(async () => {
+    try {
+      // overwrite previous data with newly-fetched data
+      // const retrievedData = await fetchLatestData();
+      const retrievedData = await fetchLatestData(pageNumber);
+      if (retrievedData) {
+        setLatestData(retrievedData.bookTitles);
+        setMaxPageNumber(parseInt(retrievedData.maxPageNumber));
+      }
+    } catch (error) {
+      console.log(
+        "Error occurred in outer trycatch block of fetchLatestData()"
+      );
+
+      console.error(error);
+    }
+  }, [pageNumber]);
+
   // extract data of latest doujinshi releases
   useEffect(() => {
-    (async () => {
-      try {
-        // overwrite previous data with newly-fetched data
-        // const retrievedData = await fetchLatestData();
-        const retrievedData = await fetchLatestData(pageNumber);
-        if (retrievedData) {
-          setLatestData(retrievedData);
-        }
-      } catch (error) {
-        console.log(
-          "Error occurred in outer trycatch block of fetchLatestData()"
-        );
-
-        console.error(error);
-      }
-    })();
-  }, [pageNumber]);
+    fetchData();
+  }, [fetchData]);
 
   return (
     <div className="homeContainer">
@@ -128,7 +131,8 @@ const fetchLatestData = async (pageNumber: number) => {
 
     // for testing purposes
     console.log("data: ");
-    console.log(data);
+    // console.table(data);
+    console.log("maxPageNumber: ", parseInt(data.maxPageNumber));
 
     // overwrite previous data with newly-fetched data
     returnData = data;
