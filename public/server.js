@@ -96,14 +96,34 @@ app.get(ENDPOINTS.default, async (req, res) => {
   res.send(apiMessage);
 });
 
+// let numRequests = 0;
+
 // "/latest"
 /**
  * Fetches title, cover, and id of the latest doujinshi releases
  * in the home page of the target website.
  */
 app.get(ENDPOINTS.latest, async (req, res) => {
+  // numRequests++;
+
+  // if (numRequests > 2) {
+  //   return;
+  // }
+
+  const page = req.query.page;
+  
+  // for testing purposes
+  console.log("page number: ", page);
+
+  let targetUrl = BASE_URL;
+
+  // if page was specified, add it to target url
+  if (page) {
+    targetUrl += `?page=${page}`;
+  }
+
   try {
-    await restLatest.getLatest(res, BASE_URL);
+    await restLatest.getLatest(res, targetUrl);
   } catch (error) {
     console.error(error);
   }
@@ -140,9 +160,10 @@ app.get(ENDPOINTS.search, async (req, res) => {
   // &page={value}
 
   // used for replacing whitespace characters with +
-  const searchInputRegex = /\s/g;
+  // const searchInputRegex = /\s/g;
 
   const searchPreCheck = req.query.search;
+  const page = req.query.page;
 
   // for testing purposes
   console.log("search input: ", searchPreCheck);
@@ -152,12 +173,19 @@ app.get(ENDPOINTS.search, async (req, res) => {
   if (!searchPreCheck) {
     res.send("search query parameter was not specified").status(CODES[400]);
   }
+  
+  // DEEMED UNNECESSARY as client is required to do that in order to
+  // successfully insert the entire search input as a query parameter
 
   // after confirming search input is indeed a string,
   // replace any whitespace characters with +
-  const searchPostCheck = searchPreCheck.replace(searchInputRegex, "+");
+  // const searchPostCheck = searchPreCheck.replace(searchInputRegex, "+");
+  
+  let targetUrl = `${BASE_URL}${SEARCH_SUFFIX}?q=${searchPreCheck}`;
 
-  const targetUrl = `${BASE_URL}${SEARCH_SUFFIX}?q=${searchPostCheck}`;
+  if (page) {
+    targetUrl += `&page=${page}`;
+  }
 
   // for testing purposes
   console.log("targetUrl: ", targetUrl);

@@ -1,36 +1,37 @@
 // third-party libraries
 import React, { ReactElement } from "react";
-import { Link } from "react-router-dom";
+import { Link as div } from "react-router-dom";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 
 // components
+import PageLink from "./PageLink";
 
 // css
-import "../styles/PageNumbers.css";
-import "../styles/Universal.css";
+import "../../styles/PageNumbers.css";
+import "../../styles/Universal.css";
 
 type PageNumbersProp = {
-  path: string;
   curPageNumber: number;
   maxPageNumber: number;
+  onChange: (newPageNumber: number) => void;
 };
 
 const MAX_VISIBLE_PAGE_NUMBERS = 3;
 
 const PageNumbers = ({
-  path,
   curPageNumber,
   maxPageNumber,
+  onChange,
 }: PageNumbersProp): ReactElement => {
   const prevPageNumber = curPageNumber - 1;
   const nextPageNumber = curPageNumber + 1;
 
-  const pathToLeft = path + `${prevPageNumber}`;
-  const pathToRight = path + `${nextPageNumber}`;
+  // const pathToLeft = path + `${prevPageNumber}`;
+  // const pathToRight = path + `${nextPageNumber}`;
 
   // for testing purposes
-  console.log("maxPageNumber: ", maxPageNumber);
+  // console.log("maxPageNumber: ", maxPageNumber);
   // console.log("pathToLeft: ", pathToLeft);
   // console.log("pathToRight: ", pathToRight);
 
@@ -38,17 +39,31 @@ const PageNumbers = ({
     <div className="paginationIconsContainer">
       {curPageNumber > 1 ? (
         <>
-          <Link to={pathToLeft} className="titleLink">
+          <PageLink
+            onChange={() => {
+              onChange(prevPageNumber);
+            }}
+          >
             <ChevronLeftIcon />
-          </Link>
+          </PageLink>
+          {/* <div className="titleLink">
+            <ChevronLeftIcon />
+          </div> */}
         </>
       ) : null}
-      {renderPagination(curPageNumber, maxPageNumber, path)}
+      {renderPagination(curPageNumber, maxPageNumber, onChange)}
       {curPageNumber < maxPageNumber ? (
         <>
-          <Link to={pathToRight} className="titleLink">
+          <PageLink
+            onChange={() => {
+              onChange(nextPageNumber);
+            }}
+          >
             <ChevronRightIcon />
-          </Link>
+          </PageLink>
+          {/* <div className="titleLink">
+            <ChevronRightIcon />
+          </div> */}
         </>
       ) : null}
     </div>
@@ -58,7 +73,7 @@ const PageNumbers = ({
 const renderPagination = (
   curPageNumber: number,
   maxPageNumber: number,
-  path: string
+  onChangePageNum: (newPageNumber: number) => void
 ) => {
   const prevPageNumber = curPageNumber - 1;
   const nextPageNumber = curPageNumber + 1;
@@ -69,14 +84,22 @@ const renderPagination = (
         <>
           <p className="curPageNumber pageNumber">{curPageNumber}</p>
           {nextPageNumber <= maxPageNumber ? (
-            <Link to={`${path}${nextPageNumber}`} className="titleLink">
+            <PageLink
+              onChange={() => {
+                onChangePageNum(nextPageNumber);
+              }}
+            >
               <p className="pageNumber">{nextPageNumber}</p>
-            </Link>
+            </PageLink>
           ) : null}
           {nextPageNumber + 1 <= maxPageNumber ? (
-            <Link to={`${path}${nextPageNumber + 1}`} className="titleLink">
+            <PageLink
+              onChange={() => {
+                onChangePageNum(nextPageNumber + 1);
+              }}
+            >
               <p className="pageNumber">{nextPageNumber + 1}</p>
-            </Link>
+            </PageLink>
           ) : null}
         </>
       );
@@ -84,14 +107,22 @@ const renderPagination = (
       return (
         <>
           {prevPageNumber - 1 >= 1 ? (
-            <Link to={`${path}${prevPageNumber - 1}`} className="titleLink">
+            <PageLink
+              onChange={() => {
+                onChangePageNum(prevPageNumber - 1);
+              }}
+            >
               <p className="pageNumber">{prevPageNumber - 1}</p>
-            </Link>
+            </PageLink>
           ) : null}
           {prevPageNumber >= 1 ? (
-            <Link to={`${path}${prevPageNumber}`} className="titleLink">
+            <PageLink
+              onChange={() => {
+                onChangePageNum(prevPageNumber);
+              }}
+            >
               <p className="pageNumber">{prevPageNumber}</p>
-            </Link>
+            </PageLink>
           ) : null}
           <p className="curPageNumber pageNumber">{curPageNumber}</p>
         </>
@@ -99,56 +130,24 @@ const renderPagination = (
     default:
       return (
         <>
-          <Link to={`${path}${prevPageNumber}`} className="titleLink">
+          <PageLink
+            onChange={() => {
+              onChangePageNum(prevPageNumber);
+            }}
+          >
             <p className="pageNumber">{prevPageNumber}</p>
-          </Link>
+          </PageLink>
           <p className="curPageNumber pageNumber">{curPageNumber}</p>
-          <Link to={`${path}${nextPageNumber}`} className="titleLink">
+          <PageLink
+            onChange={() => {
+              onChangePageNum(nextPageNumber);
+            }}
+          >
             <p className="pageNumber">{nextPageNumber}</p>
-          </Link>
+          </PageLink>
         </>
       );
   }
 };
-
-// OLD CODE
-// tried to make dynamic for loop that iterates and generate a new paragraph element
-// a maximum of 3 times
-
-// const renderPagination = (curPageNumber: number, maxPageNumber: number) => {
-//   const prevPageNumber = curPageNumber - 1;
-//   const nextPageNumber = curPageNumber + 1;
-
-//   // let pagination: ReactElement = (
-//   // <>
-//   //   <p className="pageNumber">{prevPageNumber}</p>
-//   //   <p className="curPageNumber pageNumber">{curPageNumber}</p>
-//   //   <p className="pageNumber">{nextPageNumber}</p>
-//   // </>
-//   // );
-
-//   const pagination: ReactElement[] = [];
-
-//   if (curPageNumber === 1) {
-//     // is the very first page
-//     for (
-//       let index = curPageNumber, counter = 0;
-//       counter <= MAX_VISIBLE_PAGE_NUMBERS && index <= maxPageNumber;
-//       index++, counter++
-//     ) {
-//       const className =
-//         index === curPageNumber ? "curPageNumber pageNumber" : "pageNumber";
-
-//       pagination.push(
-//         <p key={index - 1} className={className}>
-//           {index}
-//         </p>
-//       );
-//     }
-//   } else if (curPageNumber === maxPageNumber) {
-//   }
-
-//   return pagination;
-// };
 
 export default PageNumbers;
