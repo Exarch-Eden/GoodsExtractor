@@ -56,7 +56,7 @@ exports.getLatest = async (res, targetUrl) => {
     // the anchor href value
     const lastPageNumHref = $(maxPageTag).attr("href");
     // get the page number value only
-    const maxPageNumber = lastPageNumHref.match(maxPageValueRegex).join("");
+    const maxPageNumber = lastPageNumHref ? lastPageNumHref.match(maxPageValueRegex).join("") : undefined;
 
     sendData.bookTitles = bookTitles;
     sendData.maxPageNumber = maxPageNumber;

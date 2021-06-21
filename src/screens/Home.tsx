@@ -69,7 +69,11 @@ const Home = (): ReactElement => {
       const retrievedData = await fetchLatestData(pageNumber);
       if (retrievedData) {
         setLatestData(retrievedData.bookTitles);
-        setMaxPageNumber(parseInt(retrievedData.maxPageNumber));
+        // fetched max page number value may be undefined if it
+        // is the last page
+        if (retrievedData.maxPageNumber) {
+          setMaxPageNumber(parseInt(retrievedData.maxPageNumber));
+        }
       }
     } catch (error) {
       console.log(
@@ -130,9 +134,9 @@ const fetchLatestData = async (pageNumber: number) => {
     const data = await res.json();
 
     // for testing purposes
-    console.log("data: ");
+    // console.log("data: ");
     // console.table(data);
-    console.log("maxPageNumber: ", parseInt(data.maxPageNumber));
+    // console.log("maxPageNumber: ", parseInt(data.maxPageNumber));
 
     // overwrite previous data with newly-fetched data
     returnData = data;

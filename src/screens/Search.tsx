@@ -43,7 +43,7 @@ const Search = () => {
   const [formattedSearchInput, setFormattedSearchInput] = useState("");
 
   console.log("SEARCH page RENDER");
-  
+
   // const { page }: SearchRouteParams = useParams();
 
   // // change the page number if it is specified in the router params
@@ -110,7 +110,9 @@ const Search = () => {
       console.table(newSearchData);
 
       setSearchData(newSearchData.bookTitles);
-      setMaxPageNumber(newSearchData.maxPageNumber);
+      if (newSearchData.maxPageNumber) {
+        setMaxPageNumber(newSearchData.maxPageNumber);
+      }
       setFormattedSearchInput(newSearchData.formattedSearchInput);
     } catch (error) {
       console.log("Error occurred within onKeyDown()");
@@ -163,7 +165,7 @@ const Search = () => {
 const fetchSearchData = async (searchInput: string, pageNumber?: number) => {
   // holds the fetched titles related to the search input
   let bookTitles: Book[] = [];
-  let maxPageNumber = 1;
+  let maxPageNumber = undefined;
 
   // console.log("ENTER key input: ", event.target.value);
   console.log("ENTER key input: ", searchInput);
@@ -194,7 +196,9 @@ const fetchSearchData = async (searchInput: string, pageNumber?: number) => {
     // console.table(data);
 
     bookTitles = data.bookTitles;
-    maxPageNumber = parseInt(data.maxPageNumber);
+    if (data.maxPageNumber) {
+      maxPageNumber = parseInt(data.maxPageNumber);
+    }
 
     console.log("maxPageValue: ", maxPageNumber);
   } catch (error) {
